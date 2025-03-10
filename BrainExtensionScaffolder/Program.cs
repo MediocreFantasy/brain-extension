@@ -1,64 +1,118 @@
 ﻿using System.Diagnostics;
+using System.Text;
+var SKY = new List<string>()
+{
+"          o                                              ~~+                              ",
+"                       '.                  *        \\                         .   .       ",
+"                                                 .   \\                                    ",
+"                  '  .._                              * +                                 ",
+"                   .' .-'`                  .                                             ",
+"                  /  /           Brain Extension        .         '                  .    ",
+"   o .            |  |           Obsidian Wrapper                                  +   .  ",
+"                  \\  \\        +                                             *             ",
+"                   '._'-._       By Medi                                                ",
+"              '       ```    .                                    |                       ",
+"                             .               .     +'            -o-       *              ",
+"      +     .  *   o  |  .         .                   |  .       |               +       ",
+"              '     --o--        .  |                - o -       |                        ",
+"                      |          *--o--      '         |        -o-                       ",
+"                '                   |                      *     |                        ",
+"                 ~~+                            '                                         ",
+"         ':.                                                                              ",
+"         + '::._                                     + '                                  ",
+"             '._)                               .  +            *  '.                     ",
+"                                         '                                                ",
+"                           '                         o     +                  .           ",
+"                            '':.                             +                      .     ",
+"   .                           '::._ +                        o                '          ",
+"     .                           '._)                                                     ",
+};
+foreach (var line in SKY)
+{
+    Console.WriteLine(line);
+    //wait 150ms
+    Thread.Sleep(50);
+}
+Thread.Sleep(3000);
+for(var i = 0; i < 50; i++)
+{
+    Console.WriteLine();
+    //wait 150ms
+    Thread.Sleep(15);
+}
+Console.ReadLine();
+/*
 
-Console.WriteLine("Hi, Sam, hope things are going OK.");
-Console.WriteLine("Here on business?");
-var workNote = Console.ReadLine().ToLower() is ("y" or "yes" or "1") ? true : false;
-Console.WriteLine("Sure, let me get that put together for you.");
+var fileName = null;
+var clientName = null;
 var basePath = $"C:\\Vaults\\Brain Extension";
-var filePath = $"{(workNote ? "External" : "Internal")} Records\\{DateTime.Now.Year}\\{DateTime.Now.Month}\\{DateTime.Now.Day} {DateTime.Now.DayOfWeek}.md";
-// Ensure the directory exists
-Directory.CreateDirectory(Path.GetDirectoryName(basePath+"\\"+filePath));
-//try make file
-if (!File.Exists(basePath + "\\" + filePath))
+
+if (true) //(if the config file is null or invalid)
 {
-    File.CreateText(basePath + "\\" + filePath).Close();
+    goto ModifyConfig;
 }
-Console.WriteLine("I scaffolded it in Obsidian for you.");
-Console.WriteLine("Attempting to open file...");
-try
+
+bool isClientNote;
+GetGeneralOrClient:
+Console.WriteLine("Please Select: \n0: Options\n1: Daily Note\n2: Client Note");
+switch (Console.ReadLine())
 {
-    var uri = $"obsidian://open?vault=Brain%20Extension&file={Uri.EscapeDataString(filePath)}";
-    var processStartInfo = new ProcessStartInfo
+    case "0":
+        goto ModifyConfig;
+    case "1":
+        isClientNote = false; break;
+    case "2":
+        isClientNote = true; break;
+    default:
+        Console.WriteLine("Invalid selection, please try again.");
+        goto GetGeneralOrClient;
+}
+if (!isClientNote)
+{
+    Console.WriteLine("Generating Daily Note...");
+    fileName = $"External Records\\Daily Notes\\{DateTime.Now.Year}\\{DateTime.Now.Month}\\{DateTime.Now.Day} {DateTime.Now.DayOfWeek}.md";
+    goto GenerateTheFile;
+}
+
+GetClientName:
+//get all subfolders of External Records\Client Notes
+var clientFolders = Directory.GetDirectories(basePath + "\\External Records\\Client Notes");
+StringBuilder clientOptions = new StringBuilder();
+clientOptions.AppendLine("Please select a client:");
+clientOptions.AppendLine($"0: New Client");
+for (int i = 1; i <= clientFolders.Length; i++)
+{
+    clientOptions.AppendLine($"{i}: {clientFolders[i].Split('\\').Last()}");
+}
+
+Console.WriteLine(clientOptions.ToString());
+var clientSelection = Console.ReadLine();
+if (clientSelection == "0")
+{
+    Console.WriteLine("Please enter the client's name:");
+    string clientChoice = Console.ReadLine();
+    if (string.IsNullOrEmpty(clientChoice))
     {
-        FileName = uri,
-        UseShellExecute = true
-    };
-    Process.Start(processStartInfo);
-    Console.WriteLine("File should be open in Obsidian now!");
+        Console.WriteLine("Invalid client name, please try again.");
+        goto GetClientName;
+    }
+    else
+    {
+        clientName = clientChoice;
+    }
 }
-catch (Exception ex)
+else if (int.TryParse(clientSelection, out int clientIndex) && clientIndex > 0 && clientIndex <= clientFolders.Length)
 {
-    Console.WriteLine($"Failed to open file in Obsidian: {ex.Message}");
+    clientName = clientFolders[clientIndex - 1].Split('\\').Last();
+}
+else
+{
+    Console.WriteLine("Invalid selection, please try again.");
+    goto GetClientName;
 }
 
+DetermineNoteType:
+Console.WriteLine("Please Select: \n0: No Template\n1: Bug\n2: Feature\n3: Meeting");
 
-var SKY = @"          o                                              ~~+                              
-                       '.                  *        \                         .   .       
-                                                 .   \                                    
-                  '  .._                              * +                                 
-                   .' .-'`                  .                                             
-                  /  /                                  .         '                  .    
-   o .            |  |                                                             +   .  
-                  \  \        +                                             *             
-                   '._'-._                                                                
-              '       ```    .                                    |                       
-                             .               .     +'            -o-       *              
-      +     .  *   o  |  .         .                   |  .       |               +       
-              '     --o--        .  |                - o -       |                        
-                      |          *--o--      '         |        -o-                       
-                '                   |                      *     |                        
-                 ~~+                            '                                         
-         ':.                                                                              
-         + '::._                                     + '                                  
-             '._)                               .  +            *  '.                     
-                                         '                                                
-                           '                         o     +                  .           
-                            '':.                             +                      .     
-   .                           '::._ +                        o                '          
-     .                           '._)                                                     
-  .    |                                                 o                         o      
-     --o--                                                   .             '              
-       |                          '                  +                                    
-                                              .              o                   +        
- '                  . .                                        *            .          o  
-                                 .                              .                         ";
+GenerateTheFile:
+*/
