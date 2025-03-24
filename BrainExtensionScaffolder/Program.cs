@@ -8,9 +8,9 @@ var SKY = new List<string>()
 "                  '  .._                              * +                                 ",
 "                   .' .-'`                  .                                             ",
 "                  /  /           Brain Extension        .         '                  .    ",
-"   o .            |  |           Obsidian Wrapper                                  +   .  ",
+"   o .            |  |           Notes Assistant                                   +   .  ",
 "                  \\  \\        +                                             *             ",
-"                   '._'-._       By Medi                                                ",
+"                   '._'-._                                                              ",
 "              '       ```    .                                    |                       ",
 "                             .               .     +'            -o-       *              ",
 "      +     .  *   o  |  .         .                   |  .       |               +       ",
@@ -41,24 +41,26 @@ for(var i = 0; i < 50; i++)
     Thread.Sleep(15);
 }
 Console.ReadLine();
-/*
 
-var fileName = null;
-var clientName = null;
-var basePath = $"C:\\Vaults\\Brain Extension";
+string? fileName = null;
+var basePath = $"C:\\Vaults\\Brain Extension 2 Testing";
 
-if (true) //(if the config file is null or invalid)
-{
-    goto ModifyConfig;
-}
+//config management
+//var configFile = basePath + "\\config.md";
+//if (true) //(if the config file is null or invalid)
+//{
+//    goto ModifyConfig;
+//}
+//else { apply configuration }
 
 bool isClientNote;
 GetGeneralOrClient:
-Console.WriteLine("Please Select: \n0: Options\n1: Daily Note\n2: Client Note");
+//Console.WriteLine("Please Select: \n0: Options\n1: Daily Note\n2: Client Note");
+Console.WriteLine("Please Select: \n1: Daily Note\n2: Client Note");
 switch (Console.ReadLine())
 {
-    case "0":
-        goto ModifyConfig;
+    //case "0":
+    //    goto ModifyConfig;
     case "1":
         isClientNote = false; break;
     case "2":
@@ -67,6 +69,7 @@ switch (Console.ReadLine())
         Console.WriteLine("Invalid selection, please try again.");
         goto GetGeneralOrClient;
 }
+
 if (!isClientNote)
 {
     Console.WriteLine("Generating Daily Note...");
@@ -74,27 +77,29 @@ if (!isClientNote)
     goto GenerateTheFile;
 }
 
+string? clientName = null;
 GetClientName:
 //get all subfolders of External Records\Client Notes
 var clientFolders = Directory.GetDirectories(basePath + "\\External Records\\Client Notes");
 StringBuilder clientOptions = new StringBuilder();
 clientOptions.AppendLine("Please select a client:");
-clientOptions.AppendLine($"0: New Client");
+clientOptions.AppendLine($" 0: New Client");
 for (int i = 1; i <= clientFolders.Length; i++)
 {
-    clientOptions.AppendLine($"{i}: {clientFolders[i].Split('\\').Last()}");
+    clientOptions.AppendLine($"{i}: {clientFolders[i-1].Split('\\').Last()}");
 }
 
 Console.WriteLine(clientOptions.ToString());
 var clientSelection = Console.ReadLine();
 if (clientSelection == "0")
 {
+NewClient:
     Console.WriteLine("Please enter the client's name:");
     string clientChoice = Console.ReadLine();
     if (string.IsNullOrEmpty(clientChoice))
     {
-        Console.WriteLine("Invalid client name, please try again.");
-        goto GetClientName;
+        Console.WriteLine("Client name cannot be null!");
+        goto NewClient;
     }
     else
     {
@@ -115,4 +120,3 @@ DetermineNoteType:
 Console.WriteLine("Please Select: \n0: No Template\n1: Bug\n2: Feature\n3: Meeting");
 
 GenerateTheFile:
-*/
